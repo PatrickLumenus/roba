@@ -1,0 +1,12 @@
+{
+  "name": "roba",
+  "version": "1.0.0",
+  "description": "Flexible role-based access control library",
+  "main": "dist/index.js",
+  "repository": "https://github.com/Perivel/roba.git",
+  "author": "PatrickLumenus <pluy@perivel.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@chaperone/util": "^0.1.21"
+  }
+}
