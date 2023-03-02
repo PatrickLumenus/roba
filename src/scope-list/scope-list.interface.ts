@@ -3,6 +3,22 @@
 export interface ScopeListInterface {
 
     /**
+     * allowedScopes
+     * 
+     * gets the allowed scopes
+     */
+
+    readonly allowedScopes: string[];
+
+    /**
+     * rejectedScopes
+     * 
+     * gets the rejected scopes.
+     */
+    
+    readonly rejectedScopes: string[];
+
+    /**
      * allow()
      * 
      * allows a scope to the scope list

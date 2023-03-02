@@ -1,4 +1,4 @@
-
+import { ScopeListInterface } from './../scope-list';
 
 export interface Scopable {
 
@@ -6,5 +6,5 @@ export interface Scopable {
      * the list of scopes
      */
     
-    readonly scopes: string[];
+    readonly scopes: ScopeListInterface;
 }

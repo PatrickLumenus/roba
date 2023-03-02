@@ -39,6 +39,26 @@ export class ScopeList implements ScopeListInterface {
     }
 
     /**
+     * allowedScopes
+     * 
+     * gets the allowed scopes
+     */
+
+    public get allowedScopes(): string[] {
+        return this.allowed.toArray();
+    }
+
+    /**
+     * rejectedScopes
+     * 
+     * gets the rejected scopes.
+     */
+
+    public get rejectedScopes(): string[] {
+        return this.rejected.toArray();
+    }
+
+    /**
      * allow()
      * 
      * allows a scope to the list.
