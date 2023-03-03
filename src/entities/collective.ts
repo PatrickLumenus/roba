@@ -29,23 +29,15 @@ export class Collective extends PermissibleEntity {
     }
 
     public can(action: Actions, resource: Resource): boolean {
+        // we make sure we have permissions for that resource.
         let permitted = this._permissionMap.has(resource.name);
 
         if (permitted) {
-            // make sure we have the appropriate permissions.
-            let hasPermission: boolean = false;
+            // make sure we have the appropriate permissions. For collectives, we have permission if the grant type for the resource is any.
             const permissions = this._permissionMap.get(resource.name)!;
-            const type = this.getGrantTypeForAction(action, permissions.grants);
+            const hasPermission = this.getGrantTypeForAction(action, permissions.grants) === 'any';
 
-            if (resource.isCollection) {
-                hasPermission = type === 'any';
-            }
-            else {
-                // we cannot grant permissions for an instance of a resource.
-                hasPermission = false;
-            }
-
-            // make sure we have the appropriate scopes
+            // make sure we have the appropriate scopes. We have the appropriate scopes if the scope either matches the scope of the resource or if we have the global scope.
             const hasScope = this.scope === Scope.Global || (this.scope === resource.scope);
             permitted = hasScope && hasPermission;
         }
