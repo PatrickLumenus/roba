@@ -1,10 +1,6 @@
-import { ScopeListInterface } from './../scope-list';
+import { Scope } from './scope';
 
 export interface Scopable {
 
-    /**
-     * the list of scopes
-     */
-    
-    readonly scopes: ScopeListInterface;
+    readonly scope: Scope;
 }

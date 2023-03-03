@@ -1,0 +1,2 @@
+// resource
+export * from './resource';
