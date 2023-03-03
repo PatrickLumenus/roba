@@ -11,7 +11,7 @@ export abstract class PermissibleEntity implements Scopable {
 
     constructor(name: string, permissions: Permission[], scope: string = Scope.Global) {
         this.name = name;
-        this._permissionMap= this._buildPermissionsMap(permissions);
+        this._permissionMap= this.buildPermissionsMap(permissions);
         this.scope = scope;
     }
 
@@ -21,7 +21,7 @@ export abstract class PermissibleEntity implements Scopable {
         return arr;
     }
 
-    private _buildPermissionsMap(permissions: Permission[]): Map<string, Permission> {
+    private buildPermissionsMap(permissions: Permission[]): Map<string, Permission> {
         const map = new Map<string, Permission>();
         permissions.forEach(permission => {
             map.set(permission.name, permission);
