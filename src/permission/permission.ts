@@ -12,6 +12,10 @@ export class Permission implements Equatable, Serializable {
         this.grants = grants;
     }
 
+    public static All(name: string): Permission {
+        return new Permission(name, GrantSet.All());
+    }
+
     public static None(name: string): Permission {
         return new Permission(name, GrantSet.None());
     }

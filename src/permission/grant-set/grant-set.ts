@@ -15,6 +15,10 @@ export class GrantSet implements Equatable, Serializable {
         this.destroy = destroy;
     }
 
+    public static All(): GrantSet {
+        return new GrantSet('any', 'any', 'any', 'any');
+    }
+
     public static None(): GrantSet {
         return new GrantSet('none', 'none', 'none', 'none');
     }
