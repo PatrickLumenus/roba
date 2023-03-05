@@ -1,12 +1,37 @@
 {
-  "name": "roba",
+  "name": "@perivel/roba",
   "version": "1.0.0",
+  "type": "module",
   "description": "Flexible role-based access control library",
-  "main": "dist/index.js",
   "repository": "https://github.com/Perivel/roba.git",
   "author": "PatrickLumenus <pluy@perivel.com>",
   "license": "MIT",
   "dependencies": {
     "@chaperone/util": "^0.1.21"
+  },
+  "devDependencies": {
+    "rollup": "^3.18.0",
+    "rollup-plugin-delete": "^2.0.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.34.1",
+    "typescript": "^4.9.5"
+  },
+  "scripts": {
+    "build": "rollup -c --bundleConfigAsCjs"
+  },
+  "exports": {
+    ".": {
+      "browser": {
+        "import": "./dist/esm.mjs",
+        "require": "./dist/c.cjs"
+      },
+      "node": {
+        "import": "./dist/esm.mjs",
+        "require": "./dist/c.cjs"
+      },
+      "import": "./dist/esm.mjs",
+      "require": "./dist/c.cjs",
+      "types": "./dist/types/index.d.ts"
+    }
   }
 }

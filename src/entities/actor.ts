@@ -40,7 +40,7 @@ export class Actor extends PermissibleEntity {
             let hasPermission = false;
 
             if (resource.isInstance) {
-                switch(type) {
+                switch (type) {
                     case 'own':
                         hasPermission = this.id === resource.id;
                         break;

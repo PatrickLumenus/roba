@@ -12,7 +12,7 @@ export class Collective extends PermissibleEntity {
     }
 
     /**
-     * inherit()
+     * inheritFrom()
      * 
      * extends an existing collective.
      * @param collective the collective to inherit from
@@ -22,7 +22,7 @@ export class Collective extends PermissibleEntity {
      * @returns the derived collective.
      */
 
-    public static Inherit(collective: Collective, name: string, permissions: Permission[] = [], scope: string|null = null): Collective {
+    public static InheritFrom(collective: Collective, name: string, permissions: Permission[] = [], scope: string|null = null): Collective {
         const newPerms = [...collective.permissions, ...permissions];
         const newScope = scope !== null ? scope : collective.scope;
         return new Collective(name, newPerms, newScope);
