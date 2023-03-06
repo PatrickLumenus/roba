@@ -47,5 +47,29 @@ describe('Testing Permissions', () => {
   it('should prohibit users from creating accounts', () => {
     expect(users.can(Actions.Create, accounts)).to.be.false;
     expect(users.cannot(Actions.Create, accounts)).to.be.true;
-  })
+    expect(users.can(Actions.View, accounts)).to.be.true;
+    expect(users.cannot(Actions.View, accounts)).to.be.false;
+    expect(users.can(Actions.Update, accounts)).to.be.false;
+    expect(users.cannot(Actions.Update, accounts)).to.be.true;
+    expect(users.can(Actions.Destroy, accounts)).to.be.false;
+    expect(users.cannot(Actions.Destroy, accounts)).to.be.true;
+  });
+
+  it('should allow admin users to create accounts.', () => {
+    expect(admins.can(Actions.Create, accounts)).to.be.true;
+    expect(admins.cannot(Actions.Create, accounts)).to.be.false;
+  });
+
+  const bob = Actor.DerivedFrom(users, 'bob');
+  const billy = Actor.DerivedFrom(admins, 'billy-admin');
+  const bobAccount = Resource.Instance(accounts.name, 'abcde', bob.id);
+  const billyAccount = Resource.Instance(accounts.name, '12345', billy.id);
+  
+  it('should create instances with the same information.', () => {
+    expect(bob.id).to.equal('bob');
+    expect(bob.name).to.equal(users.name);
+    expect(bob.can(Actions.Create, accounts)).to.be.true;
+    expect(bob.can(Actions.Update, bobAccount)).to.be.true;
+    expect(bob.can(Actions.Update, billyAccount)).to.be.false;
+  });
 })

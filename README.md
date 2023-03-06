@@ -28,6 +28,7 @@ Like entities, resources can also have a scope.
 
 
 # Usage
+
 ```ts
 import { Resource, Collective, Actions } from 'roba';
 
