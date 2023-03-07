@@ -17,7 +17,7 @@ export class Collective extends PermissibleEntity {
     }
 
     /**
-     * inheritFrom()
+     * InheritFrom()
      * 
      * extends an existing collective.
      * @param collective the collective to inherit from

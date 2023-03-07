@@ -1,4 +1,5 @@
 import { Equatable, Serializable } from '@chaperone/util';
+import { Actor } from '../entities';
 import { Scopable, Scope } from './../scopable';
 
 
@@ -49,6 +50,20 @@ export abstract class Resource implements Scopable, Equatable, Serializable {
 
     public static Instance(name: string, id: string, owner: string, scope: string = Scope.Global): ResourceInstance {
         return new ResourceInstance(name, id, owner, scope);
+    }
+
+    /**
+     * InstanceOf()
+     * 
+     * Creates a Resource Instance from the provided resource collection.
+     * @param collection the collection to derrive from.
+     * @param id the id of the instance.
+     * @param owner the owner of the instance.
+     * @returns the created instance.
+     */
+
+    public static InstanceOf(collection: ResourceCollection,id: string, owner: Actor): ResourceInstance {
+        return Resource.Instance(collection.name, id, owner.id, collection.scope);
     }
  
     public equals(suspect: any): boolean {

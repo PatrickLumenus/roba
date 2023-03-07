@@ -3,11 +3,11 @@ Flexible Role-Based Access Control
 
 # Installation
 ```
-npm install roba
+npm install @perivel/roba
 
 or 
 
-yarn add roba
+yarn add @perivel/roba
 ```
 
 # Concepts
@@ -28,46 +28,62 @@ Like entities, resources can also have a scope.
 
 
 # Usage
-To begin, you must first define 
 
+## Creating an Entity
+To begin, you define an actor or a collective containing its own set of permissions.
+
+```ts
+import { Actor, Collective, Permission } from '@perivel/roba';
+
+// basic definition of a collective
+const users = new Collective('users', [Permissions.Protected('accounts'), ...]);
+
+// with a custom scope for a collective.
+const users = new Collective('users', [Permissions.Protected('accounts'), ...], 'my-scope');
+
+// creating an actor from a collective.
+const user = Actor.DerivedFrom(users, 'bob');
+
+// creating an Actor manually
+const user = new Actor('users', 'user-id', [Permission.Protected('accounts'), ...], 'my-scope');
+```
+An `Actor` is a single entity capable of performing an action. A `Collective` is a collection of `Actor`s under a shared name, scope, and permissions. It is highly recommended that you create a `Collective` first, and then derive `Actor`s from it using the `Actor.DeriveFrom()` method. This ensures actors have a consistent set of permissions and scopes.
+
+## Creating Resounces
+Once you have created an entity, you must next create a `Resource`. A `Resource` is something that is owned by an entity. A `Resource` can either be a Collection or an Instance. a Resource Collection refers to all instances of that resource. Meanwhile, a Resource Instance refers to a single instance of that resource with a unique identifier.
+```ts
+import { Resource } from '@perivel/roba';
+
+const accounts = Resource.Collection('accounts', 'my-scope');
+const account = Resource.InstanceOf(accounts, 'account-id', user, 'my-scope');
+```
+We define Resources with either the `Resource.Collection()` method or the `Resource.InstanceOf()` method.
+
+## Verifying Permissions
+Finally, we can check whether or not an actor or collection can perform an action as follows.
 ```ts
 import { 
-    Resource, 
-    Collective, 
     Actions 
 } from '@perivel/roba';
+import { users } from './entities';
+import { accounts } from './resources';
 
-const users = new Collective('users', [
-    new Permission('posts', GrantSet.None()), // No permissions
-    new Permission('profile', GrantSet.Protected()), // everyone can read and create. Only owners can edit and delete.
-    new Permission('bullitin', new GrantSet(create: 'any', read: 'own', update: 'none', delete: 'own')) // custom
-]);
-
-const posts = Resource.Collection('posts');
-
-users.can(Actions.Create, posts); // false
-users.cannot(actions.Read, posts) // true.
+users.can(Actions.Create, accounts); // false
+const bob = Actor.DeriveFrom(users, 'bob');
+const bobAccount = Resource.InstanceOf(accounts, 'account-id', bob);
+bob.can(Actions.Update, bobAccount); // true
 ```
+Notice how the first call to the `can()` method returns `false` while the second returns `true`. 
+
+## Inheritance
+We can `inherit` from existing collectives using the `Collective.Inheritfrom()` method. Inheriting from a Collective lets the derived collective adopt the permissions and scope of the collective it is inheriting. You can even customize permissions by redefining them in the permissions array, in which case they will override any existing permissions inside the parent collective.
 
 ```ts
-import { Action, Actor, Resource } from '@perivel/roba';
+import { Actions, Collective } from '@perivel/roba';
+import { users } from './entities';
+import { accounts } from './resources';
 
-const user = new Actor('users', 'user-id', [
-    new Permission('posts', GrantSet.None()), // No permissions
-    new Permission('profile', GrantSet.Protected()), // everyone can read and create. Only owners can edit and delete.
-    new Permission('bullitin', new GrantSet(create: 'any', read: 'own', update: 'none', delete: 'own')) // custom
-]);
-const anotherUser = new Actor('users', 'another-user-id', ...);
-const profile = Resource.Instance('profiles', 'entry-id', 'user-id');
-user.can(Actions.Update, profile); // true
-anotherUser.can(Actions.Update, profile); // false
-```
-
-```ts
-import { Resource, Actions } from '@perivel/roba';
-import { users } from './users-collective';
-
-const administrator = users.inherit(users, overridePerms);
-const profle = Resource.Instance('profile', 'entry-id', 'user-id');
-administrator.can(Actions.Delete, profile); // true
+const admins = Collective.InheritFrom(users, 'admins', [Permission.All('accounts')]);
+users.can(Actions.Destroy, accounts) // false
+admins.can(Action.Destroy, accounts) // true
 ```
