@@ -1,8 +1,8 @@
 {
   "name": "@perivel/roba",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
-  "types": "./dist/types/index.d.ts",
+  "types": "./dist/types/src/index.d.ts",
   "private": false,
   "description": "Flexible role-based access control library",
   "repository": "https://github.com/Perivel/roba.git",
@@ -40,7 +40,7 @@
       },
       "import": "./dist/esm.mjs",
       "require": "./dist/c.cjs",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/types/src/index.d.ts"
     }
   },
   "publishConfig": {
