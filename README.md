@@ -73,7 +73,7 @@ const bob = Actor.DeriveFrom(users, 'bob');
 const bobAccount = Resource.InstanceOf(accounts, 'account-id', bob);
 bob.can(Actions.Update, bobAccount); // true
 ```
-Notice how the first call to the `can()` method returns `false` while the second returns `true`. 
+Notice how the first call to the `can()` method returns `false` while the second returns `true`. When we pass a Resource Collection to the `can()` function, we are testing permissions for the collection as a whole. When we pass a Resource Instance to the `can()` method, we are testing permissions for that specific resource instance.
 
 ## Inheritance
 We can `inherit` from existing collectives using the `Collective.Inheritfrom()` method. Inheriting from a Collective lets the derived collective adopt the permissions and scope of the collective it is inheriting. You can even customize permissions by redefining them in the permissions array, in which case they will override any existing permissions inside the parent collective.
