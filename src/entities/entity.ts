@@ -122,7 +122,8 @@ export abstract class PermissibleEntity implements Scopable, Equatable, Serializ
      */
 
     protected serializePermissions(): string {
-        return this.permissions.map(perm => perm.serialize()).join(" ");
+        const strArr = this.permissions.map(perm => perm.toString());
+        return strArr.join(' ');
     }
 
     public tostring(): string {

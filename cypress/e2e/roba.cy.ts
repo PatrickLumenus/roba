@@ -75,5 +75,6 @@ describe('Testing Permissions', () => {
     expect(bob.can(Actions.Update, bobAccount)).to.be.true;
     expect(bob.can(Actions.Update, billyAccount)).to.be.false;
     expect(billy.can(Actions.Update, billyAccount)).to.be.true;
+    expect(billy.toString()).to.equal('')
   });
 });
