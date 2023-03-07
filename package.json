@@ -2,6 +2,7 @@
   "name": "@perivel/roba",
   "version": "1.0.0",
   "type": "module",
+  "private": false,
   "description": "Flexible role-based access control library",
   "repository": "https://github.com/Perivel/roba.git",
   "author": "PatrickLumenus <pluy@perivel.com>",
@@ -36,5 +37,8 @@
       "require": "./dist/c.cjs",
       "types": "./dist/types/index.d.ts"
     }
+  },
+  "publishConfig": {
+    "access": "restricted"
   }
 }
