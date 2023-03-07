@@ -32,16 +32,7 @@ describe('Testing Permissions', () => {
 
   it("should define a resource", () => {
     expect(accounts.name).to.equal('accounts');
-    expect(accounts.isCollection).to.be.true;
-    expect(accounts.isInstance).to.be.false;
-    expect(accounts.id).to.be.null;
-    expect(accounts.owner).to.be.null;
-
     expect(posts.name).to.equal('posts');
-    expect(posts.isCollection).to.be.true;
-    expect(posts.isInstance).to.be.false;
-    expect(posts.id).to.be.null;
-    expect(posts.owner).to.be.null;
   });
 
   it('should prohibit users from creating accounts', () => {
@@ -72,8 +63,6 @@ describe('Testing Permissions', () => {
   const billyAccount = Resource.Instance(accounts.name, '12345', billy.id);
 
   it('should create valid resource instances.', () => {
-    expect(bobAccount.isInstance).to.be.true;
-    expect(bobAccount.isCollection).to.be.false;
     expect(bobAccount.id).to.equal('abcde');
     expect(bobAccount.name).to.equal(accounts.name);
   });

@@ -4,6 +4,11 @@ import { Resource } from '../resource';
 import { Scope } from '../scopable';
 import { PermissibleEntity } from './entity';
 
+/**
+ * Collective
+ * 
+ * A group of entities under the same name, and share resources.
+ */
 
 export class Collective extends PermissibleEntity {
 
@@ -27,6 +32,15 @@ export class Collective extends PermissibleEntity {
         const newScope = scope !== null ? scope : collective.scope;
         return new Collective(name, newPerms, newScope);
     }
+
+    /**
+     * can()
+     * 
+     * determines if the collective can perform the action on the resource.
+     * @param action the action to be performed.
+     * @param resource The resource in which the action will be performed on.
+     * @returns TRUE if the entity can perform the action on the resource. FALSE otherwise.
+     */
 
     public can(action: Actions, resource: Resource): boolean {
         // we make sure we have permissions for that resource.

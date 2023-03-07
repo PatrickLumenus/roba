@@ -28,9 +28,14 @@ Like entities, resources can also have a scope.
 
 
 # Usage
+To begin, you must first define 
 
 ```ts
-import { Resource, Collective, Actions } from 'roba';
+import { 
+    Resource, 
+    Collective, 
+    Actions 
+} from '@perivel/roba';
 
 const users = new Collective('users', [
     new Permission('posts', GrantSet.None()), // No permissions
@@ -45,7 +50,7 @@ users.cannot(actions.Read, posts) // true.
 ```
 
 ```ts
-import { Action, Actor, Resource } from 'roba';
+import { Action, Actor, Resource } from '@perivel/roba';
 
 const user = new Actor('users', 'user-id', [
     new Permission('posts', GrantSet.None()), // No permissions
@@ -59,7 +64,7 @@ anotherUser.can(Actions.Update, profile); // false
 ```
 
 ```ts
-import { Resource, Actions } from 'roba';
+import { Resource, Actions } from '@perivel/roba';
 import { users } from './users-collective';
 
 const administrator = users.inherit(users, overridePerms);

@@ -1,10 +1,15 @@
 import { Actions } from '../actions';
 import { Permission } from '../permission';
-import { Resource } from '../resource';
+import { Resource, ResourceInstance } from '../resource';
 import { Scope } from '../scopable';
 import { PermissibleEntity } from './entity';
 import { Collective } from './collective';
 
+/**
+ * Actor
+ * 
+ * An individual entity that is able perform actions.
+ */
 
 export class Actor extends PermissibleEntity {
 
@@ -18,6 +23,15 @@ export class Actor extends PermissibleEntity {
     public static DerivedFrom(collective: Collective, id: string): Actor {
         return new Actor(collective.name, id, collective.permissions, collective.scope);
     }
+
+    /**
+     * can()
+     * 
+     * determines if the Actor can perform the action on the resource.
+     * @param action the action to be performed.
+     * @param resource The resource in which the action will be performed on.
+     * @returns TRUE if the entity can perform the action on the resource. FALSE otherwise.
+     */
 
     public can(action: Actions, resource: Resource): boolean {
         let permitted = this._permissionMap.has(resource.name);
@@ -39,7 +53,7 @@ export class Actor extends PermissibleEntity {
             const type = this.getGrantTypeForAction(action, permissions.grants);
             let hasPermission = false;
 
-            if (resource.isInstance) {
+            if (resource instanceof ResourceInstance) {
                 switch (type) {
                     case 'own':
                         hasPermission = this.id === resource.owner;

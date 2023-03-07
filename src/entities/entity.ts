@@ -3,6 +3,12 @@ import { Resource } from './../resource';
 import { GrantSet, GrantType, Permission } from './../permission';
 import { Scopable, Scope } from './../scopable';
 
+/**
+ * PermissibleEntity
+ * 
+ * A Permissible Entity
+ */
+
 export abstract class PermissibleEntity implements Scopable {
 
     readonly name: string;
@@ -21,6 +27,12 @@ export abstract class PermissibleEntity implements Scopable {
         return arr;
     }
 
+    /**
+     * buildPermissionsMap()
+     * @param permissions the array of permissions to build the map from
+     * @returns The created Permissions Map.
+     */
+
     private buildPermissionsMap(permissions: Permission[]): Map<string, Permission> {
         const map = new Map<string, Permission>();
         permissions.forEach(permission => {
@@ -29,7 +41,25 @@ export abstract class PermissibleEntity implements Scopable {
         return map;
     }
 
+    /**
+     * can()
+     * 
+     * determines if the entity can perform the action on the resource.
+     * @param action the action to be performed.
+     * @param resource The resource in which the action will be performed on.
+     * @returns TRUE if the entity can perform the action on the resource. FALSE otherwise.
+     */
+
     public abstract can(action: Actions, resource: Resource): boolean;
+
+    /**
+     * cannot()
+     * 
+     * inverse of can()
+     * @param action the action to be performed.
+     * @param resource The resource in which the action will be performed on.
+     * @returns FALSE if the entity can perform the action on the resource. TRUE otherwise.
+     */
 
     public cannot(action: Actions, resource: Resource): boolean {
         return !this.can(action, resource);
