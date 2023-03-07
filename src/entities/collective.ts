@@ -58,4 +58,13 @@ export class Collective extends PermissibleEntity {
 
         return permitted;
     }
+
+    public equals(suspect: any): boolean {
+        if (suspect instanceof Collective) {
+            return super.equals(suspect);
+        }
+        else {
+            return false;
+        }
+    }
 }

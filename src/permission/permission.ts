@@ -1,3 +1,4 @@
+
 import { Equatable, Serializable } from '@chaperone/util';
 import { GrantSet } from './grant-set';
 
@@ -13,7 +14,7 @@ export class Permission implements Equatable, Serializable {
     readonly grants: GrantSet;
 
     constructor(name: string, grants: GrantSet) {
-        this.name = name;
+        this.name = name.trim()
         this.grants = grants;
     }
 
@@ -80,9 +81,10 @@ export class Permission implements Equatable, Serializable {
     }
 
     public serialize(): string {
-        return JSON.stringify({
-            name: String,
-            grants: this.grants.serialize()
-        });
+        return `${this.name}-create-${this.grants.create.toString()} ${this.name}-read-${this.grants.view.toString()} ${this.name}-update-${this.grants.update.toString()} ${this.name}-destroy-${this.grants.destroy.toString()}`;
+    }
+
+    public toString(): string {
+        return this.serialize()
     }
 }

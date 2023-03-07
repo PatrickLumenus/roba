@@ -76,4 +76,24 @@ export class Actor extends PermissibleEntity {
 
         return permitted;
     }
+
+    public equals(suspect: any): boolean {
+        let isEqual = false;
+
+        if (suspect instanceof Actor) {
+            const other = suspect as Actor;
+            isEqual = super.equals(suspect) && (this.id === other.id);
+        }
+
+        return isEqual;
+    }
+
+    public serialize(): string {
+        return JSON.stringify({
+            name: this.name,
+            scope: this.scope,
+            id: this.id,
+            permissions: this.serializePermissions()
+        });
+    }
 }

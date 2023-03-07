@@ -1,3 +1,4 @@
+import { Equatable, Serializable } from '@chaperone/util';
 import { Actions } from './../actions';
 import { Resource } from './../resource';
 import { GrantSet, GrantType, Permission } from './../permission';
@@ -9,7 +10,7 @@ import { Scopable, Scope } from './../scopable';
  * A Permissible Entity
  */
 
-export abstract class PermissibleEntity implements Scopable {
+export abstract class PermissibleEntity implements Scopable, Equatable, Serializable {
 
     readonly name: string;
     protected readonly _permissionMap: Map<string, Permission>;
@@ -92,5 +93,39 @@ export abstract class PermissibleEntity implements Scopable {
         }
 
         return type;
+    }
+
+    public equals(suspect: any): boolean {
+        let isEqual = false;
+
+        if (suspect instanceof PermissibleEntity) {
+            const other = suspect as PermissibleEntity;
+            isEqual = (this.name === other.name) && (this.scope === other.scope);
+        }
+
+        return isEqual;
+    }
+
+    public serialize(): string {
+        return JSON.stringify({
+            name: this.name,
+            scope: this.scope,
+            permissions: this.serializePermissions()
+        });
+    }
+
+    /**
+     * serializePermissions()
+     * 
+     * serializes the permissions.
+     * @returns the serialized permissions
+     */
+
+    protected serializePermissions(): string {
+        return this.permissions.map(perm => perm.serialize()).join(" ");
+    }
+
+    public tostring(): string {
+        return this.serialize();
     }
 }

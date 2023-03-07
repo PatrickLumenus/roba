@@ -33,7 +33,7 @@ Like entities, resources can also have a scope.
 To begin, you define an actor or a collective containing its own set of permissions.
 
 ```ts
-import { Actor, Collective, Permission } from '@perivel/roba';
+import { Actor, Collective, Permission } from 'roba';
 
 // basic definition of a collective
 const users = new Collective('users', [Permissions.Protected('accounts'), ...]);
@@ -52,19 +52,19 @@ An `Actor` is a single entity capable of performing an action. A `Collective` is
 ## Creating Resounces
 Once you have created an entity, you must next create a `Resource`. A `Resource` is something that is owned by an entity. A `Resource` can either be a Collection or an Instance. a Resource Collection refers to all instances of that resource. Meanwhile, a Resource Instance refers to a single instance of that resource with a unique identifier.
 ```ts
-import { Resource } from '@perivel/roba';
+import { Resource } from 'roba';
 
 const accounts = Resource.Collection('accounts', 'my-scope');
 const account = Resource.InstanceOf(accounts, 'account-id', user, 'my-scope');
 ```
 We define Resources with either the `Resource.Collection()` method or the `Resource.InstanceOf()` method.
 
+**Note**: Resource names should be single words in lowercase plural form if possible. For example, "accounts", "users", If more than one word is needed, use underscores (`_`) to separate them. For example, "user_accounts".
+
 ## Verifying Permissions
 Finally, we can check whether or not an actor or collection can perform an action as follows.
 ```ts
-import { 
-    Actions 
-} from '@perivel/roba';
+import { Actions } from 'roba';
 import { users } from './entities';
 import { accounts } from './resources';
 
@@ -79,7 +79,7 @@ Notice how the first call to the `can()` method returns `false` while the second
 We can `inherit` from existing collectives using the `Collective.Inheritfrom()` method. Inheriting from a Collective lets the derived collective adopt the permissions and scope of the collective it is inheriting. You can even customize permissions by redefining them in the permissions array, in which case they will override any existing permissions inside the parent collective.
 
 ```ts
-import { Actions, Collective } from '@perivel/roba';
+import { Actions, Collective } from 'roba';
 import { users } from './entities';
 import { accounts } from './resources';
 

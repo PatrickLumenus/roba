@@ -60,7 +60,7 @@ describe('Testing Permissions', () => {
   const bob = Actor.DerivedFrom(users, 'bob');
   const billy = Actor.DerivedFrom(admins, 'billy-admin');
   const bobAccount = Resource.Instance(accounts.name, 'abcde', bob.id);
-  const billyAccount = Resource.Instance(accounts.name, '12345', billy.id);
+  const billyAccount = Resource.InstanceOf(accounts, '12345', billy);
 
   it('should create valid resource instances.', () => {
     expect(bobAccount.id).to.equal('abcde');

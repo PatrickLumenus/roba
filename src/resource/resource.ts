@@ -150,4 +150,8 @@ export class ResourceInstance extends Resource {
             owner: this.owner
         });
     }
+
+    public toString(): string {
+        return this.serialize();
+    }
 }
