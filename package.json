@@ -1,7 +1,8 @@
 {
   "name": "@perivel/roba",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
+  "types": "./dist/types/index.d.ts",
   "private": false,
   "description": "Flexible role-based access control library",
   "repository": "https://github.com/Perivel/roba.git",
@@ -24,7 +25,8 @@
   },
   "scripts": {
     "build": "rollup -c --bundleConfigAsCjs",
-    "test:open": "yarn cypress open"
+    "test:open": "yarn cypress open",
+    "release:patch": "yarn publish --patch"
   },
   "exports": {
     ".": {
