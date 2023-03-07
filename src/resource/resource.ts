@@ -33,7 +33,7 @@ export abstract class Resource implements Scopable, Equatable, Serializable {
      * @param scope the scope of the resource instance. Defaults to the global scope.
      * @returns an instance of a resource collection.
      */
-    public static Collecton(name: string, scope: string = Scope.Global): ResourceCollection {
+    public static Collection(name: string, scope: string = Scope.Global): ResourceCollection {
         return new ResourceCollection(name, scope);
     }
 

@@ -18,8 +18,8 @@ describe('Testing Permissions', () => {
     Permission.All('accounts')
   ]);
 
-  const accounts = Resource.Collecton('accounts');
-  const posts = Resource.Collecton('posts');
+  const accounts = Resource.Collection('accounts');
+  const posts = Resource.Collection('posts');
 
   it('should declare a collective', () => {
     expect(users.name).to.equal('users');
