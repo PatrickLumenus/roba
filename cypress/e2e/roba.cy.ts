@@ -8,18 +8,18 @@ import {
 } from './../../src';
 
 describe('Testing Permissions', () => {
+  const accounts = Resource.Collection('accounts');
+  const posts = Resource.Collection('posts');
+
   const defaultPermissions = [
-    Permission.Protected('accounts'),
-    Permission.Protected('posts')
+    Permission.Protected(accounts),
+    Permission.Protected(posts)
   ];
   const users = new Collective('users', defaultPermissions);
 
   const admins = Collective.InheritFrom(users, 'admins', [
-    Permission.All('accounts')
+    Permission.All(accounts)
   ]);
-
-  const accounts = Resource.Collection('accounts');
-  const posts = Resource.Collection('posts');
 
   it('should declare a collective', () => {
     expect(users.name).to.equal('users');

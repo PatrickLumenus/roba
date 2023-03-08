@@ -1,5 +1,6 @@
 
 import { Equatable, Serializable } from '@chaperone/util';
+import { Resource } from '../resource';
 import { GrantSet } from './grant-set';
 
 /**
@@ -22,48 +23,72 @@ export class Permission implements Equatable, Serializable {
      * All()
      * 
      * Creates a Permission instance that grants access to all actions for the resource name.
-     * @param name the name of the resource the permission partains to.
+     * @param resource The resource the permission applies to.
      * @returns the created permission.
      */
 
-    public static All(name: string): Permission {
-        return new Permission(name, GrantSet.All());
+    public static All(resource: Resource): Permission {
+        return new Permission(resource.name, GrantSet.All());
     }
 
     /**
      * None()
      * 
      * Creates a Permission instance that grants no actions to the named resource.
-     * @param name the name of the resource the permission applies to.
+     * @param resource the resource the permission applies.
      * @returns the created permission
      */
 
-    public static None(name: string): Permission {
-        return new Permission(name, GrantSet.None());
+    public static None(resource: Resource): Permission {
+        return new Permission(resource.name, GrantSet.None());
     }
 
     /**
      * Private()
      * 
      * creates a Permission instance that onlt allows the resource owner to access or modify the resource.
-     * @param name the name of the resource the permission partains to.
+     * @param resource the resource the permission applies to.
      * @returns the created resource. 
      */
 
-    public static Private(name: string): Permission {
-        return new Permission(name, GrantSet.Private());
+    public static Private(resource: Resource): Permission {
+        return new Permission(resource.name, GrantSet.Private());
     }
 
     /**
      * Protected()
      * 
      * Creates a Permission instance where anyone can create and view. However, only the owner of the resource can update and delete.
-     * @param name the name of the resource the permission partains to.
+     * @param resource the resource the permission applies to.
      * @returns The created instance.
      */
 
-    public static Protected(name: string): Permission {
-        return new Permission(name, GrantSet.Protected());
+    public static Protected(resource: Resource): Permission {
+        return new Permission(resource.name, GrantSet.Protected());
+    }
+
+    /**
+     * Public()
+     * 
+     * Creates a Permission where everything is permitted except destruction.
+     * @param resource The resource the permission applies to.
+     * @returns The created instance.
+     */
+
+    public static Public(resource: Resource): Permission {
+        return new Permission(resource.name, GrantSet.Public());
+    }
+
+    /**
+     * ViewOnly()
+     * 
+     * Creates a Permission where the view action is the only allowed action.
+     * @param resource the resource the permission applies to.
+     * @returns the created instance.
+     */
+
+    public static ViewOnly(resource: Resource): Permission {
+        return new Permission(resource.name, GrantSet.ViewOnly());
     }
 
     public equals(suspect: any): boolean {

@@ -73,6 +73,28 @@ export class GrantSet implements Equatable, Serializable {
         return new GrantSet('own', 'any', 'own', 'own');
     }
 
+    /**
+     * Public()
+     * 
+     * Creates a GrantSet where all actions are permitted except the destroy action.
+     * @returns The created instance.
+     */
+
+    public static Public(): GrantSet {
+        return new GrantSet('any', 'any', 'any', 'none');
+    }
+
+    /**
+     * ViewOnly()
+     * 
+     * Creates a GrantSet where the view action is the only allowed action.
+     * @returns the created instance.
+     */
+
+    public static ViewOnly(): GrantSet {
+        return new GrantSet('none', 'any', 'none', 'none');
+    }
+
     public equals(suspect: any): boolean {
         let isEqual = false;
 
