@@ -22,7 +22,7 @@ export class Permission implements Equatable, Serializable {
   /**
    * All()
    *
-   * Creates a Permission instance that grants access to all actions for the resource name.
+   * Creates a Permission instance that grants access to all actions for the named resource.
    * @param resource The resource the permission applies to.
    * @returns the created permission.
    */
@@ -46,7 +46,7 @@ export class Permission implements Equatable, Serializable {
   /**
    * Private()
    *
-   * creates a Permission instance that onlt allows the resource owner to access or modify the resource.
+   * creates a Permission instance that only allows the resource owner to access or modify the resource.
    * @param resource the resource the permission applies to.
    * @returns the created resource.
    */
