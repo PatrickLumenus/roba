@@ -1,6 +1,6 @@
 {
   "name": "@perivel/roba",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "type": "module",
   "types": "./dist/types/src/index.d.ts",
   "private": false,
@@ -12,7 +12,7 @@
     "dist"
   ],
   "dependencies": {
-    "@chaperone/util": "^0.1.21"
+    "@chaperone/util": "^0.2.1"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.1",
@@ -26,7 +26,9 @@
   "scripts": {
     "build": "rollup -c --bundleConfigAsCjs",
     "test:open": "yarn cypress open",
-    "release:patch": "yarn publish --patch"
+    "release:patch": "yarn publish --patch",
+    "release:minor": "yarn publish --minor",
+    "release:major": "yarn publish --major"
   },
   "exports": {
     ".": {
