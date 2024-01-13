@@ -23,10 +23,10 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@chaperone/util@^0.1.21":
-  version "0.1.21"
-  resolved "https://registry.yarnpkg.com/@chaperone/util/-/util-0.1.21.tgz#046539cbf9eed9e55cd79e2f160fb1214b318011"
-  integrity sha512-CvFjQ/45CsutONAiOBvMfwBSolEpnrt8G4ZbcY2qwA3CiYniSDMGgKHJPx2ybkjgHyudoQgSy/4Tgo4WXu/wnA==
+"@chaperone/util@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@chaperone/util/-/util-0.2.1.tgz#7cbe8b08524c38699208e5001a81354847d8a5a1"
+  integrity sha512-5ucj3wTD5Ceq5fFAIvOEdAiqpaRGw0ZdmNg4AkDgdDg+Nb/hB/r6w/iwh8WCNa1G/Xr8UgHc5SIdtt+xaVlz0Q==
   dependencies:
     awesome-phonenumber "^4.0.0"
     bcryptjs "^2.4.3"

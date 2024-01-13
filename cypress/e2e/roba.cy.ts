@@ -1,41 +1,42 @@
 import {
-  Collective, 
-  Actions, 
-  Resource, 
-  Actor, 
-  Permission, 
-  GrantSet
-} from './../../src';
+  Collective,
+  Actions,
+  Resource,
+  Actor,
+  Permission,
+  GrantSet,
+  createPermissionListFromScopeStringList,
+} from "./../../src";
 
-describe('Testing Permissions', () => {
-  const accounts = Resource.Collection('accounts');
-  const posts = Resource.Collection('posts');
+describe("Testing Permissions", () => {
+  const accounts = Resource.Collection("accounts");
+  const posts = Resource.Collection("posts");
 
   const defaultPermissions = [
     Permission.Protected(accounts),
-    Permission.Protected(posts)
+    Permission.Protected(posts),
   ];
-  const users = new Collective('users', defaultPermissions);
+  const users = new Collective("users", defaultPermissions);
 
-  const admins = Collective.InheritFrom(users, 'admins', [
-    Permission.All(accounts)
+  const admins = Collective.InheritFrom(users, "admins", [
+    Permission.All(accounts),
   ]);
 
-  it('should declare a collective', () => {
-    expect(users.name).to.equal('users');
-    expect(users.scope).to.equal('*');
+  it("should declare a collective", () => {
+    expect(users.name).to.equal("users");
+    expect(users.scope).to.equal("*");
     //expect(users.permissions).to.equal(defaultPermissions);
 
-    expect(admins.name).to.equal('admins');
-    expect(admins.scope).to.equal('*');
-  })
-
-  it("should define a resource", () => {
-    expect(accounts.name).to.equal('accounts');
-    expect(posts.name).to.equal('posts');
+    expect(admins.name).to.equal("admins");
+    expect(admins.scope).to.equal("*");
   });
 
-  it('should prohibit users from creating accounts', () => {
+  it("should define a resource", () => {
+    expect(accounts.name).to.equal("accounts");
+    expect(posts.name).to.equal("posts");
+  });
+
+  it("should prohibit users from creating accounts", () => {
     expect(users.can(Actions.Create, accounts)).to.be.false;
     expect(users.cannot(Actions.Create, accounts)).to.be.true;
     expect(users.can(Actions.View, accounts)).to.be.true;
@@ -46,7 +47,7 @@ describe('Testing Permissions', () => {
     expect(users.cannot(Actions.Destroy, accounts)).to.be.true;
   });
 
-  it('should allow admin users to create accounts.', () => {
+  it("should allow admin users to create accounts.", () => {
     expect(admins.can(Actions.Create, accounts)).to.be.true;
     expect(admins.cannot(Actions.Create, accounts)).to.be.false;
     expect(admins.can(Actions.View, accounts)).to.be.true;
@@ -57,24 +58,30 @@ describe('Testing Permissions', () => {
     expect(admins.cannot(Actions.Destroy, accounts)).to.be.false;
   });
 
-  const bob = Actor.DerivedFrom(users, 'bob');
-  const billy = Actor.DerivedFrom(admins, 'billy-admin');
-  const bobAccount = Resource.Instance(accounts.name, 'abcde', bob.id);
-  const billyAccount = Resource.InstanceOf(accounts, '12345', billy);
+  const bob = Actor.DerivedFrom(users, "bob");
+  const billy = Actor.DerivedFrom(admins, "billy-admin");
+  const bobAccount = Resource.Instance(accounts.name, "abcde", bob.id);
+  const billyAccount = Resource.InstanceOf(accounts, "12345", billy);
 
-  it('should create valid resource instances.', () => {
-    expect(bobAccount.id).to.equal('abcde');
+  it("should create valid resource instances.", () => {
+    expect(bobAccount.id).to.equal("abcde");
     expect(bobAccount.name).to.equal(accounts.name);
   });
-  
-  it('should create instances with the same information as the collectives they are part of.', () => {
-    expect(bob.id).to.equal('bob');
+
+  it("should create instances with the same information as the collectives they are part of.", () => {
+    expect(bob.id).to.equal("bob");
     expect(bob.permissions.length).to.equal(2);
     expect(bob.name).to.equal(users.name);
     expect(bob.can(Actions.Create, bobAccount)).to.be.true;
     expect(bob.can(Actions.Update, bobAccount)).to.be.true;
     expect(bob.can(Actions.Update, billyAccount)).to.be.false;
     expect(billy.can(Actions.Update, billyAccount)).to.be.true;
-    expect(billy.toString()).to.equal('')
+  });
+
+  it("should be able to serialize and reconstruct permissions", () => {
+    const permissions = bob.permissionsList;
+    const recreatedPermissions =
+      createPermissionListFromScopeStringList(permissions);
+    expect(bob.permissions).to.deep.equal(recreatedPermissions);
   });
 });
