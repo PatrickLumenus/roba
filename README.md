@@ -5,14 +5,14 @@ Flexible Role-Based Access Control
 ```
 npm install @perivel/roba
 
-or 
+or
 
 yarn add @perivel/roba
 ```
 
 # Concepts
 ## Entities
-`Entities` are the actors performing actions, such as users. There are two types of entities: `Actors` and `Collectives`. An `Actor` is a single entity designated by a unique name. Likewise, a `Collective` is a group of several actors under a certain name (such as a role). 
+`Entities` are the actors performing actions, such as users. There are two types of entities: `Actors` and `Collectives`. An `Actor` is a single entity designated by a unique name. Likewise, a `Collective` is a group of several actors under a certain name (such as a role).
 
 ### Entity Scopes
 `Scopes` are used to group things together.
@@ -74,6 +74,22 @@ const bobAccount = Resource.InstanceOf(accounts, 'account-id', bob);
 bob.can(Actions.Update, bobAccount); // true
 ```
 Notice how the first call to the `can()` method returns `false` while the second returns `true`. When we pass a Resource Collection to the `can()` function, we are testing permissions for the collection as a whole. When we pass a Resource Instance to the `can()` method, we are testing permissions for that specific resource instance.
+```ts
+import { Actions } from 'roba';
+import { users } from './entities';
+import { accounts } from './resources';
+
+users.can(Actions.Create, accounts); // false
+const bob = Actor.DeriveFrom(users, 'bob');
+const bobAccount = Resource.InstanceOf(accounts, 'account-id', bob);
+bob.can(Actions.Update, bobAccount, () => bobIsActive); // true
+```
+We have added an additional parater to the `Actor.can()` method, which returns a boolean (`bobIsActive`) that indicates whether or not we can update the `bobAccount` resource.
+
+### Custom Conditions
+There are situations where it is necessary to meet certain conditions, in addtion to having the right permissions. For this reason, it is possible to declare custom conditions that must be met in order to grant permission.
+
+
 
 ## Inheritance
 We can `inherit` from existing collectives using the `Collective.Inheritfrom()` method. Inheriting from a Collective lets the derived collective adopt the permissions and scope of the collective it is inheriting. You can even customize permissions by redefining them in the permissions array, in which case they will override any existing permissions inside the parent collective.
