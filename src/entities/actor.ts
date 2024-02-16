@@ -2,12 +2,12 @@ import { Actions } from '../actions';
 import { Permission } from '../permission';
 import { Resource, ResourceInstance } from '../resource';
 import { Scope } from '../scopable';
-import { PermissibleEntity } from './entity';
+import { PermissibleEntity, WhenFn } from './entity';
 import { Collective } from './collective';
 
 /**
  * Actor
- * 
+ *
  * An individual entity that is able perform actions.
  */
 
@@ -26,14 +26,16 @@ export class Actor extends PermissibleEntity {
 
     /**
      * can()
-     * 
+     *
      * determines if the Actor can perform the action on the resource.
      * @param action the action to be performed.
      * @param resource The resource in which the action will be performed on.
+     * @param when An optional function to customize the behavior. the when function returns true if additional
+     * requirements to grant permissions is met.
      * @returns TRUE if the entity can perform the action on the resource. FALSE otherwise.
      */
 
-    public can(action: Actions, resource: Resource): boolean {
+    public can(action: Actions, resource: Resource, when: WhenFn = () => true): boolean {
         let permitted = this._permissionMap.has(resource.name);
 
         if (permitted) {
@@ -42,7 +44,7 @@ export class Actor extends PermissibleEntity {
             //
             // The first situation is if the resource is an instance. In this
             // situation, we have to ensure the actor either owns the resource instance
-            // or the actor has permission to perform the action on any instance of the 
+            // or the actor has permission to perform the action on any instance of the
             // resource.
             //
             // The second situation is if the resource is a collection. In this situation,
@@ -72,9 +74,25 @@ export class Actor extends PermissibleEntity {
             // make sure we have the same scope.
             const hasScope = this.scope === Scope.Global || (this.scope === resource.scope);
             permitted = hasScope && hasPermission;
+
+            // process additional conditions.
+            permitted = permitted && when(this, action, resource);
         }
 
         return permitted;
+    }
+
+    /**
+     * cannot()
+     *
+     * inverse of can()
+     * @param action the action to be performed.
+     * @param resource The resource in which the action will be performed on.
+     * @returns FALSE if the entity can perform the action on the resource. TRUE otherwise.
+     */
+
+    public cannot(action: Actions, resource: Resource, when: WhenFn = () => false): boolean {
+      return !this.can(action, resource) || when(this, action, resource);
     }
 
     public equals(suspect: any): boolean {

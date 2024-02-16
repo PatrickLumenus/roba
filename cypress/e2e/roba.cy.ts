@@ -6,6 +6,7 @@ import {
   Permission,
   GrantSet,
   createPermissionListFromScopeStringList,
+  ResourceInstance,
 } from "./../../src";
 
 describe("Testing Permissions", () => {
@@ -84,4 +85,32 @@ describe("Testing Permissions", () => {
       createPermissionListFromScopeStringList(permissions);
     expect(bob.permissions).to.deep.equal(recreatedPermissions);
   });
+
+  it('should be able to view posts when 2+2 = 4', () => {
+    expect(bob.can(Actions.View, posts, () => 2+2==4)).to.be.true;
+  }),
+
+  it('should not be able to create posts when 2+2 = 5', () => {
+    expect(bob.can(Actions.Create, posts, () => 2+2 == 5)).to.be.false;
+  })
+
+  it('should be able to update billy\'s account when billy owns it', () => {
+    expect(billy.can(Actions.Update, billyAccount, (entity, _, resource) => (entity as Actor).id === (resource as ResourceInstance).owner)).to.be.true;
+  })
+
+  it('should not be able to update bob\'s account if he does not own it.', () => {
+    expect(bob.can(Actions.Update, billyAccount, (entity, _, resource) => (entity as Actor).id === (resource as ResourceInstance).owner)).to.be.false;
+  })
+
+  it('should not be able to view posts if 1 + 1 == 2', () => {
+    expect(bob.cannot(Actions.View, posts, () => 1+1 ==2)).to.be.true;
+  })
+
+  it('should be able to view posts if 1 + 1 == 3', () => {
+    expect(bob.cannot(Actions.View, posts, () => 1+1 ==3)).to.be.false;
+  })
+
+  it('should not be able to view billy\'s account if he does not own it.', () => {
+    expect(bob.cannot(Actions.View, billyAccount, (bob, _, billyAccount) => (bob as Actor).id !== (billyAccount as ResourceInstance).owner )).to.be.true;
+  })
 });

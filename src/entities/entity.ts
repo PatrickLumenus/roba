@@ -5,6 +5,14 @@ import { GrantSet, GrantType, Permission } from "./../permission";
 import { Scopable, Scope } from "./../scopable";
 
 /**
+ * WhenFn
+ *
+ * A function to determine additional conditions for granting permission.
+*/
+
+export type WhenFn = (entity: PermissibleEntity, action: Actions, resource: Resource) => boolean;
+
+/**
  * PermissibleEntity
  *
  * A Permissible Entity
@@ -63,10 +71,12 @@ export abstract class PermissibleEntity
    * determines if the entity can perform the action on the resource.
    * @param action the action to be performed.
    * @param resource The resource in which the action will be performed on.
+   * @param when An optional function to customize the behavior. the when function returns true if additional
+   * requirements to grant permissions is met.
    * @returns TRUE if the entity can perform the action on the resource. FALSE otherwise.
    */
 
-  public abstract can(action: Actions, resource: Resource): boolean;
+  public abstract can(action: Actions, resource: Resource, when: WhenFn): boolean;
 
   /**
    * cannot()
@@ -74,12 +84,12 @@ export abstract class PermissibleEntity
    * inverse of can()
    * @param action the action to be performed.
    * @param resource The resource in which the action will be performed on.
+   * @param when An optional function to customize the behavior. the when function returns true if additional
+   * requirements to deny permissions is met.
    * @returns FALSE if the entity can perform the action on the resource. TRUE otherwise.
    */
 
-  public cannot(action: Actions, resource: Resource): boolean {
-    return !this.can(action, resource);
-  }
+  public abstract cannot(action: Actions, resource: Resource, when: WhenFn): boolean;
 
   /**
    * getGrantTypeForAction()
