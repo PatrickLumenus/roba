@@ -1,19 +1,16 @@
 {
-  "name": "@perivel/roba",
-  "version": "1.2.0",
+  "name": "roba",
+  "version": "1.0.0",
   "type": "module",
   "types": "./dist/types/src/index.d.ts",
   "private": false,
   "description": "Flexible role-based access control library",
   "repository": "https://github.com/Perivel/roba.git",
-  "author": "PatrickLumenus <pluy@perivel.com>",
+  "author": "PatrickLumenus",
   "license": "MIT",
   "files": [
     "dist"
   ],
-  "dependencies": {
-    "@chaperone/util": "^0.2.1"
-  },
   "devDependencies": {
     "@types/mocha": "^10.0.1",
     "cypress": "^12.7.0",
@@ -25,10 +22,7 @@
   },
   "scripts": {
     "build": "rollup -c --bundleConfigAsCjs",
-    "test:open": "yarn cypress open",
-    "release:patch": "yarn publish --patch",
-    "release:minor": "yarn publish --minor",
-    "release:major": "yarn publish --major"
+    "test:open": "pnpm cypress open"
   },
   "exports": {
     ".": {

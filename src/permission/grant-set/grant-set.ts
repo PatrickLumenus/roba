@@ -1,4 +1,4 @@
-import { Equatable, Serializable } from "@chaperone/util";
+import { Equatable, Serializable } from "./../../utilities";
 import { GrantType } from "./grant-type.type";
 
 /**
@@ -25,7 +25,7 @@ export class GrantSet implements Equatable, Serializable {
     create: GrantType,
     view: GrantType,
     update: GrantType,
-    destroy: GrantType
+    destroy: GrantType,
   ) {
     this.create = create;
     this.view = view;

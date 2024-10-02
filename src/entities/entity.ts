@@ -1,4 +1,4 @@
-import { Equatable, Serializable } from "@chaperone/util";
+import { Equatable, Serializable } from "./../utilities";
 import { Actions } from "./../actions";
 import { Resource } from "./../resource";
 import { GrantSet, GrantType, Permission } from "./../permission";
@@ -8,9 +8,13 @@ import { Scopable, Scope } from "./../scopable";
  * WhenFn
  *
  * A function to determine additional conditions for granting permission.
-*/
+ */
 
-export type WhenFn = (entity: PermissibleEntity, action: Actions, resource: Resource) => boolean;
+export type WhenFn = (
+  entity: PermissibleEntity,
+  action: Actions,
+  resource: Resource,
+) => boolean;
 
 /**
  * PermissibleEntity
@@ -28,7 +32,7 @@ export abstract class PermissibleEntity
   constructor(
     name: string,
     permissions: Permission[],
-    scope: string = Scope.Global
+    scope: string = Scope.Global,
   ) {
     this.name = name;
     this._permissionMap = this.buildPermissionsMap(permissions);
@@ -44,7 +48,7 @@ export abstract class PermissibleEntity
   get permissionsList(): string[] {
     const scopeList: string[] = [];
     this.permissions.forEach((perm) =>
-      scopeList.push(...perm.toPermissionsList())
+      scopeList.push(...perm.toPermissionsList()),
     );
     return scopeList;
   }
@@ -56,7 +60,7 @@ export abstract class PermissibleEntity
    */
 
   private buildPermissionsMap(
-    permissions: Permission[]
+    permissions: Permission[],
   ): Map<string, Permission> {
     const map = new Map<string, Permission>();
     permissions.forEach((permission) => {
@@ -76,7 +80,11 @@ export abstract class PermissibleEntity
    * @returns TRUE if the entity can perform the action on the resource. FALSE otherwise.
    */
 
-  public abstract can(action: Actions, resource: Resource, when: WhenFn): boolean;
+  public abstract can(
+    action: Actions,
+    resource: Resource,
+    when: WhenFn,
+  ): boolean;
 
   /**
    * cannot()
@@ -89,7 +97,11 @@ export abstract class PermissibleEntity
    * @returns FALSE if the entity can perform the action on the resource. TRUE otherwise.
    */
 
-  public abstract cannot(action: Actions, resource: Resource, when: WhenFn): boolean;
+  public abstract cannot(
+    action: Actions,
+    resource: Resource,
+    when: WhenFn,
+  ): boolean;
 
   /**
    * getGrantTypeForAction()
@@ -102,7 +114,7 @@ export abstract class PermissibleEntity
 
   protected getGrantTypeForAction(
     action: Actions,
-    grants: GrantSet
+    grants: GrantSet,
   ): GrantType {
     let type: GrantType;
 
@@ -154,7 +166,7 @@ export abstract class PermissibleEntity
     return strArr.join(" ");
   }
 
-  public tostring(): string {
+  public toString(): string {
     return this.serialize();
   }
 }

@@ -2,6 +2,8 @@
 import { Actions } from "../actions";
 import { Permission, GrantSet, GrantType } from "./../permission";
 
+export * from "./interfaces";
+
 /**
  * createPermissionsListFromScopeStringList()
  *
@@ -12,7 +14,7 @@ import { Permission, GrantSet, GrantType } from "./../permission";
  */
 
 export const createPermissionListFromScopeStringList = (
-  scopeStringlist: string[]
+  scopeStringlist: string[],
 ): Permission[] => {
   const permissions: Permission[] = [];
   const permissionsMap = generatePermissionsMap(scopeStringlist);
@@ -24,9 +26,9 @@ export const createPermissionListFromScopeStringList = (
           grantSet.create || "none",
           grantSet.view || "none",
           grantSet.update || "none",
-          grantSet.destroy || "none"
-        )
-      )
+          grantSet.destroy || "none",
+        ),
+      ),
     );
   });
   return permissions;
@@ -42,7 +44,7 @@ export const createPermissionListFromScopeStringList = (
  */
 
 const generatePermissionsMap = (
-  scopeStringList: string[]
+  scopeStringList: string[],
 ): Map<string, Partial<GrantSet>> => {
   const permissionsMap = new Map<string, Partial<GrantSet>>();
   const validActions = [

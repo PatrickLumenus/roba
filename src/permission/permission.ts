@@ -1,4 +1,4 @@
-import { Equatable, Serializable } from "@chaperone/util";
+import { Equatable, Serializable } from "./../utilities";
 import { Resource } from "../resource";
 import { GrantSet } from "./grant-set";
 import { createScopeString } from "./utils";
