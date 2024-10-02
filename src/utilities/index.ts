@@ -5,15 +5,15 @@ import { Permission, GrantSet, GrantType } from "./../permission";
 export * from "./interfaces";
 
 /**
- * createPermissionsListFromScopeStringList()
+ * parsePermissionsList()
  *
- * creates a permissions list from a scope string list
+ * parses a permission lit.
  * @param scopeStringlist the scope list
  * @returns the created permissions list
  * @throws an error if the scope list is invalid
  */
 
-export const createPermissionListFromScopeStringList = (
+export const parsePermissionsList = (
   scopeStringlist: string[],
 ): Permission[] => {
   const permissions: Permission[] = [];

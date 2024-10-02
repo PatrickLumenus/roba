@@ -18,7 +18,7 @@ yarn add roba
 `Scopes` are used to group things together.
 
 ## Actions
-`Actions` are the actions that can be performed. There are only four types of actions: Create, Read, Update, Delete.
+`Actions` are the actions that can be performed. There are only four types of actions: Create, View, Update, Destroy.
 
 ## Resources
 `Resources` are the things we entities perform actions on. For example, posts. Like Entities, resources are identified by some unique name. `Resources` can either be collections or instances. `Collections` refer to the resource as a whole. Meanwhile, `Instances` are specific entry within a resource collectio, identified by an id and owner identifier.
@@ -90,7 +90,7 @@ bob.can(Actions.Update, bobAccount, () => bobIsActive); // true
 We have added an additional parater to the `Actor.can()` method, which returns a boolean (`bobIsActive`) that indicates whether or not we can update the `bobAccount` resource.
 
 ### Convenience Methods
-Roba provides a few convenience methods, all of which use the `can()` method under the hood. These methods are mainly here to make code easier to read.
+Roba entities provides a few convenience methods, all of which use the `can()` method under the hood. These methods are mainly here to make code easier to read.
 - the `canCreate(resource, whenFn)`, `canDestroy(resource, whenFn)`, `canUpdate(resource, whenFn)`, and `canView(resource, whenFn)` methods determine if each action is permitted.
 - the `cannot(action, resource, whenFn)` method is the inverse of the `can(action, resource, whenFn)` method.
 - the `cannotCreate(resource, whenFn)`, `cannotDestroy(resource, whenFn)`, `cannotUpdate(resource, whenFn)`, and `cannotView(resource, whenFn)` methods determine if each action is not permitted.
@@ -113,7 +113,7 @@ admins.can(Action.Destroy, accounts) // true
 Roba provides a few utility functions to assist with miscellaneous tasks.
 
 ### Parsing Permissions Lists
-There are situations where it is necessary to extract permissions from an entity. By default, Roba entities (Actors amd Collectives) expose a `permissionList` property which returns a string array consisting of the entity's permissions.
+There are situations where it is necessary to extract permissions from an entity. By default, Roba entities (Actors amd Collectives) expose a `permissionsList` property which returns a string array consisting of the entity's permissions.
 ```ts
 import { Actor, Collective, Permission } from 'roba';
 
@@ -125,9 +125,9 @@ collectionPermissions = users.permissionsList);
 const user = Actor.DerivedFrom(users, 'bob');
 const userPermissions = user.permissionsList);
 ```
-To reconstruct permission objects from permissions lists, Roba exports the `createPermissionsListFromScopeStringList()` function.
+To reconstruct permission objects from permissions lists, Roba exports the `parsePermissionsList()` function.
 ```ts
-import { createPermissionsListFromScopeStringList } from 'roba';
-const permissions = createPermissionsListFromScopeStringList(scopes);
+import { parsePermissionsList } from 'roba';
+const permissions = parsePermissionsList(str);
 ```
-The `createPermissionsListFromScopeStringList()` function will return a `Permission` arrat which can be used when recreating entities.
+The `parsePewrmissionsList()` function returns a `Permission` array which can be used when recreating entities.

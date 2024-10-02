@@ -98,7 +98,7 @@ export class Actor extends PermissibleEntity {
   /**
    * canCreate()
    *
-   * determines if the action can perform a create action on a resource.
+   * determines if the create action can be peformed on a resource.
    * @param resource The resource in which the action will be performed on.
    * @param when An optional function to customize the behavior. the when function returns true if additional
    * requirements to grant permissions is met.
@@ -112,7 +112,7 @@ export class Actor extends PermissibleEntity {
   /**
    * canDestroy()
    *
-   * determines if the action can perform a destroy action on a resource.
+   * determines if the destroy action can be performed on a resource.
    * @param resource The resource in which the action will be performed on.
    * @param when An optional function to customize the behavior. the when function returns true if additional
    * requirements to grant permissions is met.
@@ -126,7 +126,7 @@ export class Actor extends PermissibleEntity {
   /**
    * canUpdate()
    *
-   * determines if the action can perform an update action on a resource.
+   * determines if the update action can be performed on a resource.
    * @param resource The resource in which the action will be performed on.
    * @param when An optional function to customize the behavior. the when function returns true if additional
    * requirements to grant permissions is met.
@@ -140,12 +140,13 @@ export class Actor extends PermissibleEntity {
   /**
    * canView()
    *
-   * determines if the action can perform a view action on a resource.
+   * determines if the view action can be perormed on a resource.
    * @param resource The resource in which the action will be performed on.
    * @param when An optional function to customize the behavior. the when function returns true if additional
    * requirements to grant permissions is met.
    * @returns TRUE if the entity can perform the action on the resource. FALSE otherwise.
    */
+
   public canView(resource: Resource, when: WhenFn = () => true): boolean {
     return this.can(Actions.View, resource, when);
   }
@@ -170,7 +171,7 @@ export class Actor extends PermissibleEntity {
   /**
    * cannotCreate()
    *
-   * determines if the action cannot perform a create action on a resource.
+   * determines if the  create action cannot be performed on a resource.
    * @param resource The resource in which the action will be performed on.
    * @param when An optional function to customize the behavior. the when function returns true if additional
    * requirements to grant permissions is met.
@@ -184,7 +185,7 @@ export class Actor extends PermissibleEntity {
   /**
    * cannotDestroy()
    *
-   * determines if the action cannot perform a destroy action on a resource.
+   * determines if the destroy action cannot be peformed on a resource.
    * @param resource The resource in which the action will be performed on.
    * @param when An optional function to customize the behavior. the when function returns true if additional
    * requirements to grant permissions is met.
@@ -198,7 +199,7 @@ export class Actor extends PermissibleEntity {
   /**
    * cannotUpdate()
    *
-   * determines if the action cannot perform an update action on a resource.
+   * determines if the update action cannot be performed on a resource.
    * @param resource The resource in which the action will be performed on.
    * @param when An optional function to customize the behavior. the when function returns true if additional
    * requirements to grant permissions is met.
@@ -212,7 +213,7 @@ export class Actor extends PermissibleEntity {
   /**
    * cannotView()
    *
-   * determines if the action cannot perform a view action on a resource.
+   * determines if the view action cannot be performed on a resource.
    * @param resource The resource in which the action will be performed on.
    * @param when An optional function to customize the behavior. the when function returns true if additional
    * requirements to grant permissions is met.
