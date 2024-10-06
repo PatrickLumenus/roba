@@ -9,9 +9,9 @@ import { GrantType } from "./grant-type.type";
 
 export class GrantSet implements Equatable, Serializable {
   readonly create: GrantType;
-  readonly view: GrantType;
+  readonly read: GrantType;
   readonly update: GrantType;
-  readonly destroy: GrantType;
+  readonly delete: GrantType;
 
   /**
    * Creates a Grant Type.
@@ -23,14 +23,14 @@ export class GrantSet implements Equatable, Serializable {
 
   constructor(
     create: GrantType,
-    view: GrantType,
+    read: GrantType,
     update: GrantType,
-    destroy: GrantType,
+    delee: GrantType,
   ) {
     this.create = create;
-    this.view = view;
+    this.read = read;
     this.update = update;
-    this.destroy = destroy;
+    this.delete = read;
   }
 
   /**
@@ -106,9 +106,9 @@ export class GrantSet implements Equatable, Serializable {
       const other = suspect as GrantSet;
       isEqual =
         this.create === other.create &&
-        this.view === other.view &&
+        this.read === other.read &&
         this.update === other.update &&
-        this.destroy === other.destroy;
+        this.delete === other.delete;
     }
 
     return isEqual;
@@ -117,9 +117,9 @@ export class GrantSet implements Equatable, Serializable {
   public serialize(): string {
     return JSON.stringify({
       create: this.create,
-      view: this.view,
+      read: this.read,
       update: this.update,
-      destroy: this.destroy,
+      delete: this.delete,
     });
   }
 }

@@ -1,7 +1,7 @@
 import { Equatable, Serializable } from "./../utilities";
 import { Actions } from "./../actions";
 import { Resource } from "./../resource";
-import { GrantSet, GrantType, Permission } from "./../permission";
+import { GrantSet, Permission, PermissionsList } from "./../permission";
 import { Scopable, Scope } from "./../scopable";
 
 /**
@@ -26,8 +26,9 @@ export abstract class PermissibleEntity
   implements Scopable, Equatable, Serializable
 {
   readonly name: string;
-  protected readonly _permissionMap: Map<string, Permission>;
+  // protected readonly _permissionMap: Map<string, Permission>;
   readonly scope: string;
+  readonly permissions: Permission[];
 
   constructor(
     name: string,
@@ -35,15 +36,16 @@ export abstract class PermissibleEntity
     scope: string = Scope.Global,
   ) {
     this.name = name;
-    this._permissionMap = this.buildPermissionsMap(permissions);
+    this.permissions = permissions;
+    // this._permissionMap = this.buildPermissionsMap(permissions);
     this.scope = scope;
   }
 
-  get permissions(): Permission[] {
-    const arr: Array<Permission> = [];
-    this._permissionMap.forEach((permission) => arr.push(permission));
-    return arr;
-  }
+  // get permissions(): Permission[] {
+  //   const arr: Array<Permission> = [];
+  //   this._permissionMap.forEach((permission) => arr.push(permission));
+  //   return arr;
+  // }
 
   get permissionsList(): string[] {
     const scopeList: string[] = [];
@@ -59,81 +61,31 @@ export abstract class PermissibleEntity
    * @returns The created Permissions Map.
    */
 
-  private buildPermissionsMap(
+  protected buildPermissionsMap(
     permissions: Permission[],
-  ): Map<string, Permission> {
-    const map = new Map<string, Permission>();
+  ): Map<string, GrantSet> {
+    const map = new Map<string, GrantSet>();
     permissions.forEach((permission) => {
-      map.set(permission.name, permission);
+      map.set(permission.name, permission.grants);
     });
     return map;
   }
 
   /**
-   * can()
+   * can
    *
-   * determines if the entity can perform the action on the resource.
-   * @param action the action to be performed.
-   * @param resource The resource in which the action will be performed on.
-   * @param when An optional function to customize the behavior. the when function returns true if additional
-   * requirements to grant permissions is met.
-   * @returns TRUE if the entity can perform the action on the resource. FALSE otherwise.
+   * An object containing a list of permissions to verify against to determine if an actiion is permitted.
    */
 
-  public abstract can(
-    action: Actions,
-    resource: Resource,
-    when: WhenFn,
-  ): boolean;
+  public abstract get can(): PermissionsList;
 
   /**
-   * cannot()
+   * cannot
    *
-   * inverse of can()
-   * @param action the action to be performed.
-   * @param resource The resource in which the action will be performed on.
-   * @param when An optional function to customize the behavior. the when function returns true if additional
-   * requirements to deny permissions is met.
-   * @returns FALSE if the entity can perform the action on the resource. TRUE otherwise.
+   * An object containing a list of permissions to verify against to determine if an actiion is not permitted.
    */
 
-  public abstract cannot(
-    action: Actions,
-    resource: Resource,
-    when: WhenFn,
-  ): boolean;
-
-  /**
-   * getGrantTypeForAction()
-   *
-   * gets the corresponding grant type for the action.
-   * @param action the cation
-   * @param grants the grant set.
-   * @returns the grant type for the action.
-   */
-
-  protected getGrantTypeForAction(
-    action: Actions,
-    grants: GrantSet,
-  ): GrantType {
-    let type: GrantType;
-
-    switch (action) {
-      case Actions.Create:
-        type = grants.create;
-        break;
-      case Actions.View:
-        type = grants.view;
-        break;
-      case Actions.Update:
-        type = grants.update;
-        break;
-      default:
-        type = grants.destroy;
-    }
-
-    return type;
-  }
+  public abstract get cannot(): PermissionsList;
 
   public equals(suspect: any): boolean {
     let isEqual = false;

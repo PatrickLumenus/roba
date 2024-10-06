@@ -24,9 +24,9 @@ export const parsePermissionsList = (
         resource,
         new GrantSet(
           grantSet.create || "none",
-          grantSet.view || "none",
+          grantSet.read || "none",
           grantSet.update || "none",
-          grantSet.destroy || "none",
+          grantSet.delete || "none",
         ),
       ),
     );
@@ -49,9 +49,9 @@ const generatePermissionsMap = (
   const permissionsMap = new Map<string, Partial<GrantSet>>();
   const validActions = [
     Actions.Create.toString(),
-    Actions.Destroy.toString(),
+    Actions.Delete.toString(),
     Actions.Update.toString(),
-    Actions.View.toString(),
+    Actions.Read.toString(),
   ];
   const validGrantTypes = ["any", "none", "own"];
 
@@ -80,17 +80,17 @@ const generatePermissionsMap = (
           record = permissionsMap.get(scopeResource)!;
           record = {
             create: action === Actions.Create ? grantType : record.create,
-            view: action === Actions.View ? grantType : record.view,
+            read: action === Actions.Read ? grantType : record.read,
             update: action === Actions.Update ? grantType : record.update,
-            destroy: action === Actions.Destroy ? grantType : record.destroy,
+            delete: action === Actions.Delete ? grantType : record.delete,
           };
         } else {
           // create a new record
           record = {
             create: action === Actions.Create ? grantType : undefined,
-            view: action === Actions.View ? grantType : undefined,
+            read: action === Actions.Read ? grantType : undefined,
             update: action === Actions.Update ? grantType : undefined,
-            destroy: action === Actions.Destroy ? grantType : undefined,
+            delete: action === Actions.Delete ? grantType : undefined,
           };
         }
         permissionsMap.set(scopeResource, record);
@@ -119,14 +119,14 @@ const createActionFromString = (str: string): Actions => {
     case Actions.Create.toString():
       return Actions.Create;
       break;
-    case Actions.View.toString():
-      return Actions.View;
+    case Actions.Read.toString():
+      return Actions.Read;
       break;
     case Actions.Update.toString():
       return Actions.Update;
       break;
-    case Actions.Destroy.toString():
-      return Actions.Destroy;
+    case Actions.Delete.toString():
+      return Actions.Delete;
       break;
     default:
       throw new Error("Invalid action: " + str);

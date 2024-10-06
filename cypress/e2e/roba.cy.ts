@@ -4,7 +4,6 @@ import {
   Resource,
   Actor,
   Permission,
-  GrantSet,
   parsePermissionsList,
   ResourceInstance,
 } from "./../../src";
@@ -38,25 +37,25 @@ describe("Testing Permissions", () => {
   });
 
   it("should prohibit users from creating accounts", () => {
-    expect(users.can(Actions.Create, accounts)).to.be.false;
-    expect(users.cannot(Actions.Create, accounts)).to.be.true;
-    expect(users.can(Actions.View, accounts)).to.be.true;
-    expect(users.cannot(Actions.View, accounts)).to.be.false;
-    expect(users.can(Actions.Update, accounts)).to.be.false;
-    expect(users.cannot(Actions.Update, accounts)).to.be.true;
-    expect(users.can(Actions.Destroy, accounts)).to.be.false;
-    expect(users.cannot(Actions.Destroy, accounts)).to.be.true;
+    expect(users.can.create(accounts)).to.be.false;
+    expect(users.cannot.create(accounts)).to.be.true;
+    expect(users.can.read(accounts)).to.be.true;
+    expect(users.cannot.read(accounts)).to.be.false;
+    expect(users.can.update(accounts)).to.be.false;
+    expect(users.cannot.update(accounts)).to.be.true;
+    expect(users.can.delete(accounts)).to.be.false;
+    expect(users.cannot.delete(accounts)).to.be.true;
   });
 
   it("should allow admin users to create accounts.", () => {
-    expect(admins.can(Actions.Create, accounts)).to.be.true;
-    expect(admins.cannot(Actions.Create, accounts)).to.be.false;
-    expect(admins.can(Actions.View, accounts)).to.be.true;
-    expect(admins.cannot(Actions.View, accounts)).to.be.false;
-    expect(admins.can(Actions.Update, accounts)).to.be.true;
-    expect(admins.cannot(Actions.Update, accounts)).to.be.false;
-    expect(admins.can(Actions.Destroy, accounts)).to.be.true;
-    expect(admins.cannot(Actions.Destroy, accounts)).to.be.false;
+    expect(admins.can.create(accounts)).to.be.true;
+    expect(admins.cannot.create(accounts)).to.be.false;
+    expect(admins.can.read(accounts)).to.be.true;
+    expect(admins.cannot.read(accounts)).to.be.false;
+    expect(admins.can.update(accounts)).to.be.true;
+    expect(admins.cannot.update(accounts)).to.be.false;
+    expect(admins.can.delete(accounts)).to.be.true;
+    expect(admins.cannot.delete(accounts)).to.be.false;
   });
 
   const bob = Actor.DerivedFrom(users, "bob");
@@ -73,10 +72,10 @@ describe("Testing Permissions", () => {
     expect(bob.id).to.equal("bob");
     expect(bob.permissions.length).to.equal(2);
     expect(bob.name).to.equal(users.name);
-    expect(bob.can(Actions.Create, bobAccount)).to.be.true;
-    expect(bob.can(Actions.Update, bobAccount)).to.be.true;
-    expect(bob.can(Actions.Update, billyAccount)).to.be.false;
-    expect(billy.can(Actions.Update, billyAccount)).to.be.true;
+    expect(bob.can.create(bobAccount)).to.be.true;
+    expect(bob.can.update(bobAccount)).to.be.true;
+    expect(bob.can.update(billyAccount)).to.be.false;
+    expect(billy.can.update(billyAccount)).to.be.true;
   });
 
   it("should be able to serialize and reconstruct permissions", () => {
@@ -86,49 +85,47 @@ describe("Testing Permissions", () => {
   });
 
   it("should be able to view posts when 2+2 = 4", () => {
-    expect(bob.can(Actions.View, posts, () => 2 + 2 == 4)).to.be.true;
-  }),
-    it("should not be able to create posts when 2+2 = 5", () => {
-      expect(bob.can(Actions.Create, posts, () => 2 + 2 == 5)).to.be.false;
-    });
+    expect(bob.can.read(posts, () => 2 + 2 == 4)).to.be.true;
+  });
+
+  it("should not be able to create posts when 2+2 = 5", () => {
+    expect(bob.can.create(posts, () => 2 + 2 == 5)).to.be.false;
+  });
 
   it("should be able to update billy's account when billy owns it", () => {
     expect(
-      billy.can(
-        Actions.Update,
+      billy.can.update(
         billyAccount,
         (entity, _, resource) =>
-          (entity as Actor).id === (resource as ResourceInstance).owner,
+          entity.identifier === (resource as ResourceInstance).owner,
       ),
     ).to.be.true;
   });
 
   it("should not be able to update bob's account if he does not own it.", () => {
     expect(
-      bob.can(
-        Actions.Update,
+      bob.can.update(
         billyAccount,
         (entity, _, resource) =>
-          (entity as Actor).id === (resource as ResourceInstance).owner,
+          entity.identifier === (resource as ResourceInstance).owner,
       ),
     ).to.be.false;
   });
 
   it("should not be able to view posts if 1 + 1 == 2", () => {
-    expect(bob.cannot(Actions.View, posts, () => 1 + 1 == 2)).to.be.true;
+    expect(bob.cannot.read(posts, () => 1 + 1 == 2)).to.be.true;
   });
 
   it("should be able to view posts if 1 + 1 == 3", () => {
-    expect(bob.cannot(Actions.View, posts, () => 1 + 1 == 3)).to.be.false;
+    expect(bob.cannot.read(posts, () => 1 + 1 == 3)).to.be.false;
   });
 
   it("should not be able to view billy's account if he does not own it.", () => {
     expect(
-      bob.cannot(
-        Actions.View,
+      bob.cannot.read(
         billyAccount,
         (bob, _, billyAccount) =>
-          (bob as Actor).id !== (billyAccount as ResourceInstance).owner,
+          bob.identifier !== (billyAccount as ResourceInstance).owner,
       ),
     ).to.be.true;
   });
