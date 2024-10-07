@@ -38,7 +38,7 @@ export abstract class PermissibleEntity
     this.name = name;
     this.permissions = permissions;
     // this._permissionMap = this.buildPermissionsMap(permissions);
-    this.scope = scope;
+    this.scope = scope.trim();
   }
 
   // get permissions(): Permission[] {

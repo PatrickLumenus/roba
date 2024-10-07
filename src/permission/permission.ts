@@ -357,7 +357,7 @@ export class PermissionsBlacklist extends PermissionsList {
           restricted =
             resource instanceof ResourceInstance
               ? this.identifier !== resource.owner
-              : false;
+              : true;
           break;
         case "any":
           restricted = false;
@@ -391,7 +391,7 @@ export class PermissionsBlacklist extends PermissionsList {
           restricted =
             resource instanceof ResourceInstance
               ? this.identifier !== resource.owner
-              : false;
+              : true;
           break;
         case "any":
           restricted = false;
@@ -425,7 +425,7 @@ export class PermissionsBlacklist extends PermissionsList {
           restricted =
             resource instanceof ResourceInstance
               ? this.identifier !== resource.owner
-              : false;
+              : true;
           break;
         case "any":
           restricted = false;
@@ -459,7 +459,7 @@ export class PermissionsBlacklist extends PermissionsList {
           restricted =
             resource instanceof ResourceInstance
               ? this.identifier !== resource.owner
-              : false;
+              : true;
           break;
         case "any":
           restricted = false;
