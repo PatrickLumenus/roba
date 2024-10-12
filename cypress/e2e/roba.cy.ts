@@ -6,6 +6,7 @@ import {
   Permission,
   parsePermissionsList,
   ResourceInstance,
+  Scope,
 } from "./../../src";
 
 describe("Testing Permissions", () => {

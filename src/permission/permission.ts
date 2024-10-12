@@ -1,6 +1,6 @@
 import { Equatable, Serializable } from "./../utilities";
 import { Resource, ResourceInstance } from "../resource";
-import { GrantSet } from "./grant-set";
+import { GrantSet, GrantType } from "./grant-set";
 import { createScopeString } from "./utils";
 import { Actions } from "../actions";
 import { WhenFn } from "../common";
@@ -185,6 +185,12 @@ export abstract class PermissionsList {
   public abstract delete(resource: Resource, when?: WhenFn): boolean;
 }
 
+/**
+ * PermissionsWhiteList
+ *
+ * A permissions list that defines situations when actions are permissible.
+ */
+
 export class PermissionsWhitelist extends PermissionsList {
   constructor(
     subject: string,
@@ -195,33 +201,41 @@ export class PermissionsWhitelist extends PermissionsList {
     super(subject, permissioins, scope, identifier);
   }
 
-  public create(resource: Resource, when: WhenFn = () => true): boolean {
-    // verify we have permissiions
-    const permission = this.permissions.get(resource.name);
-    let permitted = permission !== undefined;
+  private isPermissible(
+    resource: Resource,
+    grant?: GrantType,
+    identifier?: string,
+  ): boolean {
+    let result = false;
 
-    if (permission) {
-      switch (permission.create) {
+    if (grant) {
+      switch (grant) {
         case "own":
-          permitted =
+          result =
             resource instanceof ResourceInstance
               ? this.identifier === resource.owner
               : false;
           break;
         case "any":
-          permitted = true;
+          result = true;
+          break;
         default:
-          permitted = false;
+          result = false;
       }
     }
 
-    // verify our scope.
-    const hasScope =
-      this.scope === Scope.Global || this.scope === resource.scope;
+    return result;
+  }
 
+  private hasMatchingResourceScope(resource: Resource): boolean {
+    return this.scope === Scope.Global || this.scope === resource.scope;
+  }
+
+  public create(resource: Resource, when: WhenFn = () => true): boolean {
+    const permission = this.permissions.get(resource.name);
     return (
-      permitted &&
-      hasScope &&
+      this.isPermissible(resource, permission?.create, this.identifier) &&
+      this.hasMatchingResourceScope(resource) &&
       when(
         { identifier: this.identifier, name: this.subject, scope: this.scope },
         Actions.Create,
@@ -231,32 +245,10 @@ export class PermissionsWhitelist extends PermissionsList {
   }
 
   public read(resource: Resource, when: WhenFn = () => true): boolean {
-    // verify we have permissiions
     const permission = this.permissions.get(resource.name);
-    let permitted = permission !== undefined;
-
-    if (permission) {
-      switch (permission.read) {
-        case "own":
-          permitted =
-            resource instanceof ResourceInstance
-              ? this.identifier === resource.owner
-              : false;
-          break;
-        case "any":
-          permitted = true;
-        default:
-          permitted = false;
-      }
-    }
-
-    // verify our scope.
-    const hasScope =
-      this.scope === Scope.Global || this.scope === resource.scope;
-
     return (
-      permitted &&
-      hasScope &&
+      this.isPermissible(resource, permission?.read, this.identifier) &&
+      this.hasMatchingResourceScope(resource) &&
       when(
         { identifier: this.identifier, name: this.subject, scope: this.scope },
         Actions.Read,
@@ -266,32 +258,10 @@ export class PermissionsWhitelist extends PermissionsList {
   }
 
   public update(resource: Resource, when: WhenFn = () => true): boolean {
-    // verify we have permissiions
     const permission = this.permissions.get(resource.name);
-    let permitted = permission !== undefined;
-
-    if (permission) {
-      switch (permission.update) {
-        case "own":
-          permitted =
-            resource instanceof ResourceInstance
-              ? this.identifier === resource.owner
-              : false;
-          break;
-        case "any":
-          permitted = true;
-        default:
-          permitted = false;
-      }
-    }
-
-    // verify our scope.
-    const hasScope =
-      this.scope === Scope.Global || this.scope === resource.scope;
-
     return (
-      permitted &&
-      hasScope &&
+      this.isPermissible(resource, permission?.update, this.identifier) &&
+      this.hasMatchingResourceScope(resource) &&
       when(
         { identifier: this.identifier, name: this.subject, scope: this.scope },
         Actions.Update,
@@ -301,32 +271,10 @@ export class PermissionsWhitelist extends PermissionsList {
   }
 
   public delete(resource: Resource, when: WhenFn = () => true): boolean {
-    // verify we have permissiions
     const permission = this.permissions.get(resource.name);
-    let permitted = permission !== undefined;
-
-    if (permission) {
-      switch (permission.delete) {
-        case "own":
-          permitted =
-            resource instanceof ResourceInstance
-              ? this.identifier === resource.owner
-              : false;
-          break;
-        case "any":
-          permitted = true;
-        default:
-          permitted = false;
-      }
-    }
-
-    // verify our scope.
-    const hasScope =
-      this.scope === Scope.Global || this.scope === resource.scope;
-
     return (
-      permitted &&
-      hasScope &&
+      this.isPermissible(resource, permission?.delete, this.identifier) &&
+      this.hasMatchingResourceScope(resource) &&
       when(
         { identifier: this.identifier, name: this.subject, scope: this.scope },
         Actions.Delete,
@@ -335,6 +283,12 @@ export class PermissionsWhitelist extends PermissionsList {
     );
   }
 }
+
+/**
+ * PermissionsBlackList
+ *
+ * A permissions list that defines situations when actions are not permissible.
+ */
 
 export class PermissionsBlacklist extends PermissionsList {
   constructor(
@@ -346,32 +300,41 @@ export class PermissionsBlacklist extends PermissionsList {
     super(subject, permissioins, scope, identifier);
   }
 
-  public create(resource: Resource, when: WhenFn = () => false): boolean {
-    // verify we have permissiions
-    const permission = this.permissions.get(resource.name);
-    let restricted = permission === undefined;
+  private isProhibited(
+    resource: Resource,
+    grant?: GrantType,
+    identifier?: string,
+  ): boolean {
+    let result = false;
 
-    if (permission) {
-      switch (permission.create) {
+    if (grant) {
+      switch (grant) {
         case "own":
-          restricted =
+          result =
             resource instanceof ResourceInstance
-              ? this.identifier !== resource.owner
+              ? resource.owner !== identifier
               : true;
           break;
-        case "any":
-          restricted = false;
+        case "none":
+          result = true;
+          break;
         default:
-          restricted = true;
+          result = false;
       }
     }
 
-    // verify our scope dies bit natch.
-    const hasScopeMismatch = this.scope !== resource.scope;
+    return result;
+  }
 
+  private hasProhibitedScope(resource: Resource): boolean {
+    return this.scope !== Scope.Global && this.scope !== resource.scope;
+  }
+
+  public create(resource: Resource, when: WhenFn = () => false): boolean {
+    const permission = this.permissions.get(resource.name);
     return (
-      restricted ||
-      hasScopeMismatch ||
+      this.isProhibited(resource, permission?.create, this.identifier) ||
+      this.hasProhibitedScope(resource) ||
       when(
         { identifier: this.identifier, name: this.subject, scope: this.scope },
         Actions.Create,
@@ -381,31 +344,10 @@ export class PermissionsBlacklist extends PermissionsList {
   }
 
   public read(resource: Resource, when: WhenFn = () => false): boolean {
-    // verify we have permissiions
     const permission = this.permissions.get(resource.name);
-    let restricted = permission === undefined;
-
-    if (permission) {
-      switch (permission.read) {
-        case "own":
-          restricted =
-            resource instanceof ResourceInstance
-              ? this.identifier !== resource.owner
-              : true;
-          break;
-        case "any":
-          restricted = false;
-        default:
-          restricted = true;
-      }
-    }
-
-    // verify our scope dies bit natch.
-    const hasScopeMismatch = this.scope !== resource.scope;
-
     return (
-      restricted ||
-      hasScopeMismatch ||
+      this.isProhibited(resource, permission?.read, this.identifier) ||
+      this.hasProhibitedScope(resource) ||
       when(
         { identifier: this.identifier, name: this.subject, scope: this.scope },
         Actions.Read,
@@ -415,31 +357,10 @@ export class PermissionsBlacklist extends PermissionsList {
   }
 
   public update(resource: Resource, when: WhenFn = () => false): boolean {
-    // verify we have permissiions
     const permission = this.permissions.get(resource.name);
-    let restricted = permission === undefined;
-
-    if (permission) {
-      switch (permission.update) {
-        case "own":
-          restricted =
-            resource instanceof ResourceInstance
-              ? this.identifier !== resource.owner
-              : true;
-          break;
-        case "any":
-          restricted = false;
-        default:
-          restricted = true;
-      }
-    }
-
-    // verify our scope dies bit natch.
-    const hasScopeMismatch = this.scope !== resource.scope;
-
     return (
-      restricted ||
-      hasScopeMismatch ||
+      this.isProhibited(resource, permission?.update, this.identifier) ||
+      this.hasProhibitedScope(resource) ||
       when(
         { identifier: this.identifier, name: this.subject, scope: this.scope },
         Actions.Update,
@@ -449,31 +370,10 @@ export class PermissionsBlacklist extends PermissionsList {
   }
 
   public delete(resource: Resource, when: WhenFn = () => false): boolean {
-    // verify we have permissiions
     const permission = this.permissions.get(resource.name);
-    let restricted = permission === undefined;
-
-    if (permission) {
-      switch (permission.delete) {
-        case "own":
-          restricted =
-            resource instanceof ResourceInstance
-              ? this.identifier !== resource.owner
-              : true;
-          break;
-        case "any":
-          restricted = false;
-        default:
-          restricted = true;
-      }
-    }
-
-    // verify our scope dies bit natch.
-    const hasScopeMismatch = this.scope !== resource.scope;
-
     return (
-      restricted ||
-      hasScopeMismatch ||
+      this.isProhibited(resource, permission?.delete, this.identifier) ||
+      this.hasProhibitedScope(resource) ||
       when(
         { identifier: this.identifier, name: this.subject, scope: this.scope },
         Actions.Delete,
