@@ -4,7 +4,7 @@ Flexible Role-Based Access Control
 Roba is a lightweight access control library that lets you quickly define and verify rules for controlling access to resources.
 
 ## What Does "Roba" Mean?
-Roba just uncreatively means **Ro*le-**B**ased **A**ccess. Clever, right?
+Roba just uncreatively means **Ro**le-**B**ased **A**ccess. Clever, right?
 
 # Installation
 ```
@@ -147,3 +147,6 @@ The `parsePewrmissionsList()` function returns a `Permission` array which can be
 
 # LICENSE
 Roba is provided under the [MIT](./LICENSE) license.
+
+# Reporting Issues
+If you encounter any issues, you can open an issue [here](https://github.com/PatrickLumenus/roba/issues).
