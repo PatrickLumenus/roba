@@ -5,11 +5,16 @@
   "types": "./dist/types/src/index.d.ts",
   "private": false,
   "description": "Flexible role-based access control library",
-  "repository": "https://github.com/Perivel/roba.git",
+  "repository": "https://github.com/PatrickLumenus/roba",
   "author": "PatrickLumenus",
   "license": "MIT",
   "files": [
     "dist"
+  ],
+  "keywords": [
+    "rba",
+    "access control",
+    "role based access"
   ],
   "devDependencies": {
     "@types/mocha": "^10.0.1",
@@ -40,6 +45,6 @@
     }
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   }
 }

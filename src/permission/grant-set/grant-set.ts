@@ -14,11 +14,11 @@ export class GrantSet implements Equatable, Serializable {
   readonly delete: GrantType;
 
   /**
-   * Creates a Grant Type.
+   * Creates a Grant Set
    * @param create the create grant
-   * @param view the view (read) grant.
+   * @param read the view (read) grant.
    * @param update the update grant.
-   * @param destroy the destroy (delete) grant.
+   * @param delete the destroy (delete) grant.
    */
 
   constructor(
@@ -47,7 +47,7 @@ export class GrantSet implements Equatable, Serializable {
   /**
    * None()
    *
-   * Creates a GrantType instance that grants no actions.
+   * Creates a GrantSet instance that grants no actions.
    * @returns the created grant type
    */
 
@@ -58,7 +58,7 @@ export class GrantSet implements Equatable, Serializable {
   /**
    * Private()
    *
-   * creates a GrantType instance that only allows the owner to perform access or modify actions.
+   * creates a GrantSet instance that only allows the owner to perform access or modify actions.
    * @returns the created instance
    */
 
@@ -69,7 +69,7 @@ export class GrantSet implements Equatable, Serializable {
   /**
    * Protected()
    *
-   * Creates a GrantType instance where anyone can create and view. However, only the owner of the resource can update and delete.
+   * Creates a GrantSet instance where anyone can create and view. However, only the owner of the resource can update and delete.
    * @returns The created instance
    */
 
