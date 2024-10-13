@@ -4,7 +4,11 @@ import { GrantType } from "./grant-type.type";
 /**
  * GrantSet
  *
- * A set of grants.
+ * A set of grants for each action type (create, read, update, and delete).
+ * Each grant in a Grant Set has three possible values.
+ * "any" means any entity can perform the action.
+ * "own" means only the resource owner can perform the action.
+ * "none" means the action is completely restricted.
  */
 
 export class GrantSet implements Equatable, Serializable {
