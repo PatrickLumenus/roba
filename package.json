@@ -5,7 +5,10 @@
   "types": "./dist/types/src/index.d.ts",
   "private": false,
   "description": "Readable, declaration-first authorization for Typescript",
-  "repository": "https://github.com/PatrickLumenus/roba",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PatrickLumenus/roba"
+  },
   "author": "PatrickLumenus",
   "license": "MIT",
   "files": [
