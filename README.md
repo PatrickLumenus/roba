@@ -113,13 +113,12 @@ bob.cannot.update(bobAccount); // false
 We can `inherit` from existing collectives using the `Collective.Inheritfrom()` method. Inheriting from a Collective lets the derived collective adopt the permissions and scope of the collective it is inheriting. You can even customize permissions by redefining them in the permissions array, in which case they will override any existing permissions inside the parent collective.
 
 ```ts
-import { Actions, Collective } from 'roba';
 import { users } from './entities';
 import { accounts } from './resources';
 
 const admins = Collective.InheritFrom(users, 'admins', [Permission.All('accounts')]);
-users.can(Actions.Destroy, accounts) // false
-admins.can(Action.Destroy, accounts) // true
+users.can.delete(accounts) // false
+admins.can.delete(accounts) // true
 ```
 
 ## Utilities

@@ -19,22 +19,22 @@ export class GrantSet implements Equatable, Serializable {
 
   /**
    * Creates a Grant Set
-   * @param create the create grant
-   * @param read the view (read) grant.
-   * @param update the update grant.
-   * @param delete the destroy (delete) grant.
+   * @param createGrant the create grant
+   * @param readGrant the view (read) grant.
+   * @param updateGrant the update grant.
+   * @param deleteGrant the destroy (delete) grant.
    */
 
   constructor(
-    create: GrantType,
-    read: GrantType,
-    update: GrantType,
-    delee: GrantType,
+    createGrant: GrantType,
+    readGrant: GrantType,
+    updateGrant: GrantType,
+    deleteGrant: GrantType,
   ) {
-    this.create = create;
-    this.read = read;
-    this.update = update;
-    this.delete = read;
+    this.create = createGrant;
+    this.read = readGrant;
+    this.update = updateGrant;
+    this.delete = deleteGrant;
   }
 
   /**
