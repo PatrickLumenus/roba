@@ -1,7 +1,21 @@
 # roba
-Flexible Role-Based Access Control
+Readable, declaration-first authorization for TypeScript
 
-Roba is a lightweight access control library that lets you quickly define and verify rules for controlling access to resources.
+Roba is a lightweight authorization library focused on type-safe, fluent permission checks 
+without relying heavily on fragile string literals or external policy DSLs.
+
+```ts
+const Users = new Collective('users', [Permissions.Protected('posts')]);
+const Posts = Resource.Collection('posts');
+const firstUser = Actor.DeriveFrom(Users, "u1");
+
+if (firstUser.can.create(Posts)) {
+  // create post
+}
+else {
+  // permission denied.
+}
+```
 
 ## What Does "Roba" Mean?
 Roba just uncreatively means **Ro**le-**B**ased **A**ccess. Clever, right?
